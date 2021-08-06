@@ -1,33 +1,15 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
+    kotlin("android")
+    id("build.logic.android")
+    id("build.logic.kotlin")
     id("build.logic.kotlin.checks")
 }
 
 android {
-    compileSdk = 30
-
     defaultConfig {
         applicationId = "com.olderwold.jlabs.github"
-        minSdk = 21
-        targetSdk = 30
-        versionCode = 1
-        versionName = "1.0"
-
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-    }
-    sourceSets {
-        getByName("main").java.srcDirs(
-            "src/main/kotlin",
-            "src/main/kotlinX"
-        )
-        getByName("androidTest").java.srcDirs(
-            "src/androidTest/kotlin"
-        )
-        getByName("test").java.srcDirs(
-            "src/test/kotlin",
-            "src/test/kotlinX"
-        )
     }
 
     signingConfigs {
@@ -39,6 +21,7 @@ android {
             keyPassword = "android"
         }
     }
+
     buildTypes {
         getByName("debug") {
             signingConfig = signingConfigs.getByName(this.name)
@@ -51,37 +34,22 @@ android {
             )
         }
     }
-    compileOptions {
-        // Flag to enable support for the new language APIs
-        isCoreLibraryDesugaringEnabled = true
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-    testOptions {
-        unitTests.isReturnDefaultValues = true
-        unitTests.isIncludeAndroidResources = true
-    }
+
     lint {
-        isWarningsAsErrors = true
         lintConfig = file("lint.xml")
-        textReport = true
-        textOutput("stdout")
     }
+
     buildFeatures {
         resValues = true
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
-    variantFilter {
-        val enableBuildTypeRelease: String? by project
-        val enableRelease = enableBuildTypeRelease?.toBoolean() ?: true
-        val isRelease = buildType.name == "release"
-        ignore = (isRelease && !enableRelease)
+
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
     }
 }
 
@@ -100,23 +68,4 @@ dependencies {
 
     // Add support for Java 8 Time API
     coreLibraryDesugaring(libs.androidtools.desugarJdk)
-}
-
-tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
-    kotlinOptions {
-        // Treat all Kotlin warnings as errors (disabled by default)
-        val warningsAsErrors: String? by project
-        allWarningsAsErrors = warningsAsErrors.toBoolean()
-
-        freeCompilerArgs = freeCompilerArgs + listOf(
-            "-Xopt-in=kotlin.RequiresOptIn",
-            // Enable experimental coroutines APIs, including Flow
-            "-Xopt-in=kotlin.Experimental",
-        )
-
-        freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.Experimental"
-
-        // Set JVM target to 1.8
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
 }
