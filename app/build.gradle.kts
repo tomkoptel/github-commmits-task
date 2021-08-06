@@ -65,6 +65,7 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
     lint {
+        isWarningsAsErrors = true
         lintConfig = file("lint.xml")
         textReport = true
         textOutput("stdout")
