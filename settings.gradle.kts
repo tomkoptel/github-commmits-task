@@ -1,4 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
 pluginManagement {
     repositories {
         google()
@@ -12,3 +11,5 @@ rootProject.name = "github-commmits-task"
 
 includeBuild("build-logic")
 include("app")
+
+enableFeaturePreview("VERSION_CATALOGS")

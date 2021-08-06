@@ -9,6 +9,10 @@ buildscript {
     }
 }
 
+plugins {
+    id("build.logic.project.health")
+}
+
 allprojects {
     group = "com.olderwold.jlabs.github"
     version = "1.0"
