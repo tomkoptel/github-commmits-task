@@ -1,4 +1,3 @@
-enableFeaturePreview("VERSION_CATALOGS")
 pluginManagement {
     repositories {
         google()
@@ -8,6 +7,16 @@ pluginManagement {
 
     includeBuild("build-logic")
 }
+
+enableFeaturePreview("VERSION_CATALOGS")
+dependencyResolutionManagement {
+    versionCatalogs {
+        create("pluginLibs") {
+            from(files("$rootDir/gradle/pluginLibs.versions.toml"))
+        }
+    }
+}
+
 rootProject.name = "github-commmits-task"
 
 includeBuild("build-logic")

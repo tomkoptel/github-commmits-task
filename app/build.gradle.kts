@@ -4,8 +4,6 @@ plugins {
     id("build.logic.kotlin.checks")
 }
 
-val compose_version = "1.0.1"
-
 android {
     compileSdk = 30
 
@@ -67,6 +65,7 @@ android {
         unitTests.isIncludeAndroidResources = true
     }
     lint {
+        isWarningsAsErrors = true
         lintConfig = file("lint.xml")
         textReport = true
         textOutput("stdout")
@@ -76,7 +75,7 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = compose_version
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
     variantFilter {
         val enableBuildTypeRelease: String? by project
@@ -87,39 +86,20 @@ android {
 }
 
 dependencies {
-    val accompanist_version = "0.16.0"
-
     // Align versions of all Kotlin components
     implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
     // Use the Kotlin JDK 8 standard library.
     implementation(kotlin("stdlib-jdk8"))
 
-    implementation("androidx.compose.runtime:runtime:$compose_version")
-    implementation("androidx.compose.ui:ui:$compose_version")
-    implementation("androidx.compose.foundation:foundation-layout:$compose_version")
-    implementation("androidx.compose.material:material:$compose_version")
-    implementation("androidx.compose.material:material-icons-extended:$compose_version")
-    implementation("androidx.compose.foundation:foundation:$compose_version")
-    implementation("androidx.compose.animation:animation:$compose_version")
-    implementation("androidx.compose.ui:ui-tooling:$compose_version")
-    implementation("androidx.compose.runtime:runtime-livedata:$compose_version")
-    implementation("androidx.navigation:navigation-compose:2.4.0-alpha06")
+    implementation(libs.bundles.androidx.compose)
+    implementation(libs.bundles.androidx.navigation)
+    implementation(libs.bundles.accompanist)
 
-    implementation("com.google.accompanist:accompanist-swiperefresh:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-insets:$accompanist_version")
-    implementation("com.google.accompanist:accompanist-systemuicontroller:$accompanist_version")
-
-    implementation("androidx.appcompat:appcompat:1.3.1")
-    implementation("androidx.activity:activity-ktx:1.3.1")
-    implementation("androidx.core:core-ktx:1.6.0")
-    implementation("androidx.activity:activity-compose:1.3.1")
-
-    implementation("androidx.lifecycle:lifecycle-viewmodel-savedstate:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
+    implementation(libs.androidx.activity)
+    implementation(libs.androidx.appcompat)
 
     // Add support for Java 8 Time API
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.5")
+    coreLibraryDesugaring(libs.androidtools.desugarJdk)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {

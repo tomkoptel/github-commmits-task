@@ -29,14 +29,6 @@ detekt {
     }
 }
 
-val ktlint = tasks.withType<org.jlleitschuh.gradle.ktlint.tasks.KtLintCheckTask>()
-val detekt = tasks.withType<io.gitlab.arturbosch.detekt.Detekt>()
-tasks.matching { it.name.contains("check") }
-    .configureEach {
-        this.dependsOn(ktlint)
-        this.dependsOn(detekt)
-    }
-
-detekt.configureEach {
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
     exclude { projectDir.toURI().relativize(it.file.toURI()).path.contains("/generated/") }
 }

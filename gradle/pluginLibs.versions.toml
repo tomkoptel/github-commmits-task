@@ -1,0 +1,10 @@
+[versions]
+kotlin = "1.5.21"
+
+[libraries]
+kotlin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
+android = { module = "com.android.tools.build:gradle", version = { prefer = "7.0.0" } }
+dependencyAnalysis = { module = "com.autonomousapps:dependency-analysis-gradle-plugin", version = { prefer = "0.75.0" } }
+ktlint = { module = "org.jlleitschuh.gradle:ktlint-gradle", version = { prefer = "10.1.0" } }
+detekt = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version = { prefer = "1.18.0-RC3" } }
+doctor = { module = "com.osacky.doctor:doctor-plugin", version = { prefer = "0.7.1" } }

@@ -11,6 +11,7 @@
                 <projects>
                   <project path="$PROJECT_DIR$/build-logic" />
                   <project path="$PROJECT_DIR$/build-logic/kotlin-static-checks" />
+                  <project path="$PROJECT_DIR$/build-logic/project-health" />
                 </projects>
               </build>
             </builds>
@@ -26,6 +27,7 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/build-logic" />
             <option value="$PROJECT_DIR$/build-logic/kotlin-static-checks" />
+            <option value="$PROJECT_DIR$/build-logic/project-health" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />
