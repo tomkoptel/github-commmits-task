@@ -11,12 +11,14 @@ pluginManager.withPlugin("com.android.library") {
 
 fun applyConventions(extension: BaseExtension) = extension.run {
     setCompileSdkVersion(30)
+
     defaultConfig {
         minSdk = 21
         targetSdk = 30
         versionCode = 1
         versionName = "1.0"
     }
+
     sourceSets {
         getByName("main").java.srcDirs(
             "src/main/kotlin",
@@ -30,20 +32,22 @@ fun applyConventions(extension: BaseExtension) = extension.run {
             "src/test/kotlinX"
         )
     }
+
     compileOptions {
-        // Flag to enable support for the new language APIs
-        isCoreLibraryDesugaringEnabled = true
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     testOptions {
         unitTests.isReturnDefaultValues = true
     }
+
     lintOptions {
         isWarningsAsErrors = true
         textReport = true
         textOutput("stdout")
     }
+
     variantFilter {
         val enableBuildTypeRelease: String? by project
         val enableRelease = enableBuildTypeRelease?.toBoolean() ?: true
