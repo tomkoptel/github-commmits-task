@@ -10,4 +10,5 @@ dependencyResolutionManagement {
 }
 
 include("kotlin-static-checks")
+include("convention")
 include("project-health")
