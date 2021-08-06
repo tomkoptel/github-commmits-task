@@ -14,6 +14,7 @@ buildscript {
 
 plugins {
     id("build.logic.project.health")
+    id("build.logic.doctor")
 }
 
 allprojects {

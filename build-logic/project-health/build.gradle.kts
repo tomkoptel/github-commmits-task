@@ -9,4 +9,5 @@ repositories {
 
 dependencies {
     implementation(pluginLibs.dependencyAnalysis)
+    implementation(pluginLibs.doctor)
 }
