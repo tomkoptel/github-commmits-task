@@ -1,9 +1,9 @@
 plugins {
     id("com.android.application")
-    id("kotlin-android")
-    id("build.logic.kotlin.checks")
+    kotlin("android")
     id("build.logic.android")
-    id("build.logic.android.kotlin")
+    id("build.logic.kotlin")
+    id("build.logic.kotlin.checks")
 }
 
 android {

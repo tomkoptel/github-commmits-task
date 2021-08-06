@@ -1,12 +1,4 @@
-import com.android.build.gradle.AppExtension
-import com.android.build.gradle.BaseExtension
-import com.android.build.gradle.LibraryExtension
-import org.jetbrains.kotlin.gradle.dsl.KotlinJvmOptions
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
-
-plugins {
-    id("org.jetbrains.kotlin.android.extensions")
-}
 
 tasks.withType<KotlinCompile>().configureEach {
     kotlinOptions {
@@ -26,17 +18,3 @@ tasks.withType<KotlinCompile>().configureEach {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
-
-pluginManager.withPlugin("com.android.application") {
-    applyConventions(the<AppExtension>())
-}
-pluginManager.withPlugin("com.android.library") {
-    applyConventions(the<LibraryExtension>())
-}
-
-fun applyConventions(extension: BaseExtension) = extension.run {
-    the<KotlinJvmOptions>().run {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
-}
-
