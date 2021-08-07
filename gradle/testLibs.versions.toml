@@ -1,0 +1,25 @@
+[versions]
+okreplay = "1.6.0"
+mockk = "1.9.3"
+
+[libraries]
+okreplay-core = { module = "com.airbnb.okreplay:okreplay", version.ref = "okreplay" }
+okreplay-junit = { module = "com.airbnb.okreplay:junit", version.ref = "okreplay" }
+junit4 = { module = "junit:junit", version = { prefer = "4.13.2" } }
+
+mockk-core = { module = "io.mockk:mockk", version.ref = "mockk" }
+mockk-dsl = { module = "io.mockk:mockk-dsl", version.ref = "mockk" }
+
+kluent = { module = "org.amshove.kluent:kluent", version = { prefer = "1.65" } }
+
+[bundles]
+engine = [
+    "junit4",
+    "mockk-core",
+    "mockk-dsl",
+    "kluent",
+]
+network = [
+    "okreplay-core",
+    "okreplay-junit",
+]

@@ -54,11 +54,6 @@ android {
 }
 
 dependencies {
-    // Align versions of all Kotlin components
-    implementation(platform("org.jetbrains.kotlin:kotlin-bom"))
-    // Use the Kotlin JDK 8 standard library.
-    implementation(kotlin("stdlib-jdk8"))
-
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.bundles.accompanist)
