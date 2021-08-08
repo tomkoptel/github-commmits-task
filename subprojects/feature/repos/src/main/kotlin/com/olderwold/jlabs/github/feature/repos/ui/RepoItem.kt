@@ -30,7 +30,7 @@ internal fun RepoItem(
             .clickable { onItemClicked(item.name) },
         elevation = 8.dp,
 
-        ) {
+    ) {
         Column(
             modifier = Modifier
                 .fillMaxWidth()

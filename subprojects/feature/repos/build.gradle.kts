@@ -22,20 +22,20 @@ android {
 
 dependencies {
     /**
-    Unused dependencies which should be removed:
-    - implementation("androidx.fragment:fragment-ktx:1.3.6")
+     Unused dependencies which should be removed:
+     - implementation("androidx.fragment:fragment-ktx:1.3.6")
 
-    Transitively used dependencies that should be declared directly as indicated:
-    - api("androidx.fragment:fragment:1.3.6")
-    - api("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
-    - implementation("androidx.activity:activity-ktx:1.2.2")
-    - implementation("androidx.activity:activity:1.2.4")
+     Transitively used dependencies that should be declared directly as indicated:
+     - api("androidx.fragment:fragment:1.3.6")
+     - api("androidx.lifecycle:lifecycle-viewmodel:2.3.1")
+     - implementation("androidx.activity:activity-ktx:1.2.2")
+     - implementation("androidx.activity:activity:1.2.4")
 
-    Existing dependencies which should be modified to be as indicated:
-    - api(project(":retrofit-cache")) (was implementation)
-    - api("androidx.compose.runtime:runtime:1.0.1") (was implementation)
-    - api("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.0") (was testImplementation)
-    - api("androidx.compose.ui:ui-tooling-preview:1.0.1") (was implementation)
+     Existing dependencies which should be modified to be as indicated:
+     - api(project(":retrofit-cache")) (was implementation)
+     - api("androidx.compose.runtime:runtime:1.0.1") (was implementation)
+     - api("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:1.5.0") (was testImplementation)
+     - api("androidx.compose.ui:ui-tooling-preview:1.0.1") (was implementation)
      */
 
     api(project(":retrofit-cache"))

@@ -2,11 +2,11 @@ package com.olderwold.jlabs.github.feature.repos.data
 
 import com.olderwold.jlabs.github.feature.repos.data.dto.ReposDtoItem
 import com.olderwold.jlabs.github.retrofit.Cacheable
+import java.util.concurrent.TimeUnit
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import java.util.concurrent.TimeUnit
 
 internal interface GithubApi {
     companion object {
