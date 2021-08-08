@@ -1,4 +1,4 @@
-package com.olderwold.jlabs.github.feature.data
+package com.olderwold.jlabs.github.tape
 
 import okreplay.OkReplayConfig
 import okreplay.OkReplayInterceptor
@@ -6,7 +6,7 @@ import okreplay.RecorderRule
 import okreplay.TapeMode
 import org.junit.rules.TestRule
 
-internal fun <Api : Any> tape(
+fun <Api : Any> tape(
     builder: OkReplayConfig.Builder.() -> Unit = {},
     api: (OkReplayInterceptor) -> Api,
 ): TapeRule<Api> {
@@ -24,7 +24,7 @@ internal fun <Api : Any> tape(
     )
 }
 
-internal class TapeRule<Api : Any>(
+class TapeRule<Api : Any>(
     private val delegate: TestRule,
     val api: Api,
 ) : TestRule by delegate

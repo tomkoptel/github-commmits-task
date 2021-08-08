@@ -16,6 +16,7 @@ dependencies {
     implementation(libs.retrofit2.gson)
     implementation(libs.gson)
 
+    testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.network)
     testImplementation(testLibs.junit4)
     testImplementation(testLibs.kluent)
