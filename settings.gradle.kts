@@ -25,6 +25,7 @@ rootProject.name = "github-commmits-task"
 includeBuild("build-logic")
 subproject(name = "app", path = file("subprojects/app"))
 subproject(name = "feature-repos", path = file("subprojects/feature/repos"))
+subproject(name = "feature-details", path = file("subprojects/feature/details"))
 subproject(name = "retrofit-cache", path = file("subprojects/libs/retrofit-cache"))
 
 /**
