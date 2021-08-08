@@ -56,12 +56,16 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature-repos"))
+
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.navigation)
-    implementation(libs.bundles.accompanist)
+
+    implementation(libs.accompanist.insets)
 
     implementation(libs.androidx.activity)
     implementation(libs.androidx.appcompat)
+    implementation(libs.androidx.fragment)
 
     // Add support for Java 8 Time API
     coreLibraryDesugaring(libs.androidtools.desugarJdk)

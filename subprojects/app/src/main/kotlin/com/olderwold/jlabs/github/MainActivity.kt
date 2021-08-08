@@ -1,12 +1,12 @@
 package com.olderwold.jlabs.github
 
-import android.view.View
+import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 
 class MainActivity : AppCompatActivity() {
-    override fun setContentView(view: View?) {
-        super.setContentView(view)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         setContent { App() }
     }
 }

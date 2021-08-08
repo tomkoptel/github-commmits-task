@@ -15,7 +15,7 @@ class GithubApiTest {
     @Test
     @OkReplay
     fun smokeTest(): Unit = runBlocking {
-        val hotListing = testRule.api.hotListing(limit = 1)
+        val hotListing = testRule.api.repos()
         hotListing.shouldNotBeEmpty()
     }
 }

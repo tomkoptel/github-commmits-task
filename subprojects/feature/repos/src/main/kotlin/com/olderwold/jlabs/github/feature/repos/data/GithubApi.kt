@@ -7,7 +7,6 @@ import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 internal interface GithubApi {
     companion object {
@@ -30,8 +29,5 @@ internal interface GithubApi {
 
     @Cacheable(until = 5, unit = TimeUnit.MINUTES)
     @GET("/users/mralexgray/repos")
-    suspend fun hotListing(
-        @Query("limit") limit: Int,
-        @Query("after") after: String? = null,
-    ): List<ReposDtoItem>
+    suspend fun repos(): List<ReposDtoItem>
 }

@@ -4,7 +4,7 @@ interactions:
 - recorded: 2021-08-07T20:44:18.090Z
   request:
     method: GET
-    uri: https://api.github.com/users/mralexgray/repos?limit=1
+    uri: https://api.github.com/users/mralexgray/repos
   response:
     status: 200
     headers:
