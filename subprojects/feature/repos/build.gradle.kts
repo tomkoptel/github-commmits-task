@@ -8,6 +8,18 @@ plugins {
     id("build.logic.kotlin.checks")
 }
 
+android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
+}
+
 dependencies {
     api(project(":retrofit-cache"))
 
@@ -17,6 +29,10 @@ dependencies {
     implementation(libs.gson)
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     implementation("io.arrow-kt:arrow-core:0.13.2")
+
+    implementation(libs.bundles.androidx.compose)
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.0.1")
 
     testImplementation(testLibs.bundles.network)
     testImplementation(testLibs.junit4)

@@ -5,10 +5,23 @@ import com.olderwold.jlabs.github.feature.repos.domain.Repo
 
 internal class NetworkGetRepos(
     private val githubApi: GithubApi,
-): GetRepos {
+) : GetRepos {
     override suspend fun invoke(): List<Repo> {
         return githubApi.repos().mapNotNull { dto ->
-            dto.name?.let { Repo(it) }
+            val id = dto.id
+            val name = dto.name
+            val url = dto.url
+            val description = dto.description
+            if (id != null && name != null && url != null) {
+                Repo(
+                    id = id.toString(),
+                    name = name,
+                    url = url,
+                    description = description
+                )
+            } else {
+                null
+            }
         }
     }
 }

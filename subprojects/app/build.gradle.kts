@@ -56,6 +56,8 @@ android {
 }
 
 dependencies {
+    implementation(project(":feature-repos"))
+
     implementation(libs.bundles.androidx.compose)
     implementation(libs.bundles.androidx.navigation)
     implementation(libs.bundles.accompanist)

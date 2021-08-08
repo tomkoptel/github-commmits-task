@@ -1,7 +1,10 @@
 package com.olderwold.jlabs.github.feature.repos.ui
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.olderwold.jlabs.github.feature.repos.data.GithubApi
+import com.olderwold.jlabs.github.feature.repos.data.NetworkGetRepos
 import com.olderwold.jlabs.github.feature.repos.domain.GetRepos
 import com.olderwold.jlabs.github.feature.repos.domain.Repo
 import kotlinx.coroutines.Dispatchers
@@ -41,5 +44,15 @@ internal class ReposViewModel(
         data class Loaded(
             val data: Result<List<Repo>>,
         ) : UiState()
+    }
+
+    object Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            val githubApi = GithubApi()
+            val reposViewModel = ReposViewModel(NetworkGetRepos(githubApi))
+            reposViewModel.init()
+            return reposViewModel as T
+        }
     }
 }
