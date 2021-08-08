@@ -1,18 +1,11 @@
 plugins {
     id("com.android.library")
-    kotlin("android")
     id("build.logic.android")
-    id("build.logic.kotlin")
-    id("build.logic.kotlin.checks")
-}
 
-android {
-    buildFeatures {
-        resValues = true
-    }
-    kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_1_8.toString()
-    }
+    kotlin("android")
+    id("build.logic.kotlin")
+    id("build.logic.kotlin.android")
+    id("build.logic.kotlin.checks")
 }
 
 dependencies {

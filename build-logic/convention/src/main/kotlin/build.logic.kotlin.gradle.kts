@@ -18,12 +18,3 @@ tasks.withType<KotlinCompile>().configureEach {
         jvmTarget = JavaVersion.VERSION_1_8.toString()
     }
 }
-
-pluginManager.withPlugin("org.jetbrains.kotlin.android") {
-    dependencies {
-        // Align versions of all Kotlin components
-        add("implementation", platform("org.jetbrains.kotlin:kotlin-bom"))
-        // Use the Kotlin JDK 8 standard library.
-        add("implementation", kotlin("stdlib-jdk8"))
-    }
-}
