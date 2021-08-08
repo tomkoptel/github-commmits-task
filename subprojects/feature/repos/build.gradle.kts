@@ -45,7 +45,8 @@ dependencies {
     implementation(libs.androidx.composeMaterial)
     api(libs.androidx.composeUiTooling)
 
-    testImplementation(testLibs.bundles.network)
+    testImplementation(project(":test-tape"))
+    testImplementation(testLibs.bundles.okreplay)
     testImplementation(testLibs.junit4)
     testImplementation(testLibs.kluent)
     testImplementation(libs.kotlinx.coroutinesCore)

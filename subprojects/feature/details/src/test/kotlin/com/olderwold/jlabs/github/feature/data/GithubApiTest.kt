@@ -1,4 +1,4 @@
-package com.olderwold.jlabs.github.feature.repos.data
+package com.olderwold.jlabs.github.feature.data
 
 import com.olderwold.jlabs.github.tape.tape
 import kotlinx.coroutines.runBlocking
@@ -16,7 +16,7 @@ class GithubApiTest {
     @Test
     @OkReplay
     fun smokeTest(): Unit = runBlocking {
-        val hotListing = testRule.api.repos()
+        val hotListing = testRule.api.repoDetails(repo = "ACEView")
         hotListing.shouldNotBeEmpty()
     }
 }
