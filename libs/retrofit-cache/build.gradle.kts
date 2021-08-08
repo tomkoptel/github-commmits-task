@@ -1,6 +1,8 @@
 plugins {
     `java-library`
     kotlin("jvm")
+    id("build.logic.kotlin")
+    id("build.logic.kotlin.checks")
 }
 
 java {
@@ -9,6 +11,6 @@ java {
 }
 
 dependencies {
-    implementation(libs.okhttp3.core)
+    api(libs.okhttp3.core)
     implementation(libs.retrofit2.core)
 }
