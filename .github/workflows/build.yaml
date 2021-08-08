@@ -39,6 +39,7 @@ jobs:
   apk:
     name: Generate APK
     runs-on: ubuntu-18.04
+    if: github.ref == 'refs/heads/develop'
 
     steps:
       - uses: actions/checkout@v1
@@ -66,4 +67,4 @@ jobs:
         uses: actions/upload-artifact@v1
         with:
           name: app
-          path: app/build/outputs/apk/debug/app-debug.apk
+          path: subprojects/app/build/outputs/apk/debug/app-debug.apk
