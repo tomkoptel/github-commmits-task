@@ -17,8 +17,9 @@ dependencies {
     implementation(libs.gson)
 
     testImplementation(project(":test-tape"))
-    testImplementation(testLibs.bundles.network)
+    testImplementation(testLibs.bundles.okreplay)
     testImplementation(testLibs.junit4)
     testImplementation(testLibs.kluent)
     testImplementation(libs.kotlinx.coroutinesCore)
+    testImplementation(libs.kotlinx.coroutinesCoreJvm)
 }

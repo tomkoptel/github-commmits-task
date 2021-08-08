@@ -5,6 +5,7 @@ plugins {
 }
 
 dependencies {
-    implementation(testLibs.junit4)
-    implementation(testLibs.bundles.network)
+    api(testLibs.junit4)
+    api(testLibs.okreplay.core)
+    implementation(testLibs.okreplay.junit)
 }

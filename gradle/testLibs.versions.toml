@@ -13,7 +13,7 @@ mockk-dsl = { module = "io.mockk:mockk-dsl", version.ref = "mockk" }
 kluent = { module = "org.amshove.kluent:kluent", version = { prefer = "1.65" } }
 
 [bundles]
-network = [
+okreplay = [
     "okreplay-core",
     "okreplay-junit",
 ]
