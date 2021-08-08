@@ -1,9 +1,9 @@
 package com.olderwold.jlabs.github.retrofit
 
+import java.util.concurrent.TimeUnit
 import okhttp3.CacheControl
 import okhttp3.Interceptor
 import okhttp3.Response
-import java.util.concurrent.TimeUnit
 
 internal class NetworkInterceptor : Interceptor {
     private companion object {
