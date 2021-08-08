@@ -6,9 +6,11 @@ activityX = "1.3.1"
 retrofit = "2.9.0"
 okhttp = "4.4.1"
 coroutines = "1.5.1"
+lifecycleViewmodel = "2.3.1"
 
 [libraries]
 androidx-composeUi = { module = "androidx.compose.ui:ui", version.ref = "compose" }
+androidx-composeUiTooling = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-composeUiGraphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "compose" }
 androidx-composeUiText = { module = "androidx.compose.ui:ui-text", version.ref = "compose" }
 androidx-composeUiUnit = { module = "androidx.compose.ui:ui-unit", version.ref = "compose" }
@@ -22,10 +24,13 @@ androidx-navigationRuntime = { module = "androidx.navigation:navigation-runtime"
 androidx-navigationCommon = { module = "androidx.navigation:navigation-common", version.ref = "navigation" }
 
 accompanist-insets = { module = "com.google.accompanist:accompanist-insets", version.ref = "accompanist" }
-accompanist-systemuicontroller = { module = "com.google.accompanist:accompanist-systemuicontroller", version.ref = "accompanist" }
 
 androidx-activity = { module = "androidx.activity:activity", version.ref = "activityX" }
+androidx-activityKtx = { module = "androidx.activity:activity-ktx", version.ref = "activityX" }
 androidx-activityCompose = { module = "androidx.activity:activity-compose", version.ref = "activityX" }
+androidx-fragment = { module = "androidx.fragment:fragment", version = { prefer = "1.3.6" } }
+androidx-lifecycleViewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel", version.ref = "lifecycleViewmodel" }
+androidx-lifecycleViewmodelKtx = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycleViewmodel" }
 
 androidx-appcompat = { module = "androidx.appcompat:appcompat", version = { prefer = "1.3.1" } }
 
@@ -56,9 +61,5 @@ androidx-navigation = [
     "androidx-navigationCompose",
     "androidx-navigationRuntime",
     "androidx-navigationCommon",
-]
-accompanist = [
-    "accompanist-insets",
-    "accompanist-systemuicontroller",
 ]
 
