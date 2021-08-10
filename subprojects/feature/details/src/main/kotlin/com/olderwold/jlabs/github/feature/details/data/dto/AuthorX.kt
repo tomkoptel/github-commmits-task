@@ -1,8 +1,8 @@
-package com.olderwold.jlabs.github.feature.data.dto
+package com.olderwold.jlabs.github.feature.details.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-internal data class Committer(
+internal data class AuthorX(
     @SerializedName("date")
     val date: String? = null,
     @SerializedName("email")

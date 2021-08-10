@@ -1,4 +1,4 @@
-package com.olderwold.jlabs.github.feature.data
+package com.olderwold.jlabs.github.feature.details.data
 
 import com.olderwold.jlabs.github.tape.tape
 import kotlinx.coroutines.runBlocking
