@@ -10,7 +10,9 @@ lifecycleViewmodel = "2.3.1"
 
 [libraries]
 androidx-composeUi = { module = "androidx.compose.ui:ui", version.ref = "compose" }
-androidx-composeUiTooling = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
+androidx-composeUiTooling = { module = "androidx.compose.ui:ui-tooling", version.ref = "compose" }
+androidx-composeUiToolingData = { module = "androidx.compose.ui:ui-tooling-data", version.ref = "compose" }
+androidx-composeUiToolingPreview = { module = "androidx.compose.ui:ui-tooling-preview", version.ref = "compose" }
 androidx-composeUiGraphics = { module = "androidx.compose.ui:ui-graphics", version.ref = "compose" }
 androidx-composeUiText = { module = "androidx.compose.ui:ui-text", version.ref = "compose" }
 androidx-composeUiUnit = { module = "androidx.compose.ui:ui-unit", version.ref = "compose" }

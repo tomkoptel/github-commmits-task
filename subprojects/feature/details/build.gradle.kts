@@ -8,6 +8,15 @@ plugins {
     id("build.logic.kotlin.checks")
 }
 
+android {
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    }
+}
+
 dependencies {
     api(project(":retrofit-cache"))
 
@@ -15,6 +24,17 @@ dependencies {
     api(libs.retrofit2.core)
     implementation(libs.retrofit2.gson)
     implementation(libs.gson)
+
+    implementation(libs.androidx.composeUi)
+    implementation(libs.androidx.composeUiGraphics)
+    implementation(libs.androidx.composeUiText)
+    implementation(libs.androidx.composeUiUnit)
+    api(libs.androidx.composeRuntime)
+    implementation(libs.androidx.composeFoundation)
+    implementation(libs.androidx.composeFoundationLayout)
+    implementation(libs.androidx.composeMaterial)
+
+    api(libs.androidx.composeUiTooling)
 
     testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.okreplay)
