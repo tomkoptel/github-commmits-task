@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">JLabs Github</string>
+    <string name="navigate_up">Navigate up</string>
 </resources>
