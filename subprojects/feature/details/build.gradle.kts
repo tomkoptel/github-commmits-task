@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.androidx.composeFoundation)
     implementation(libs.androidx.composeFoundationLayout)
     implementation(libs.androidx.composeMaterial)
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
     api(libs.androidx.composeUiTooling)
 

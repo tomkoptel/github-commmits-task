@@ -20,24 +20,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
-val CommitColor = Color(0xff00efce)
-
-data class MonthReport(
-    val totalCommits: Int,
-    val commitNumbers: Int,
-    val month: String,
-) {
-    val maxHeight: Dp = 80.dp
-    val maxWidth: Dp = 10.dp
-
-    val barHeight: Dp
-        get() {
-            return maxHeight * (commitNumbers.toFloat() / totalCommits.toFloat())
-        }
-}
+internal val CommitColor = Color(0xff00efce)
 
 @Composable
-fun RepoDetails(items: List<MonthReport>) {
+internal fun RepoDetails(items: List<MonthReport>) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
@@ -48,7 +34,7 @@ fun RepoDetails(items: List<MonthReport>) {
 }
 
 @Composable
-fun MonthCommits(
+internal fun MonthCommits(
     item: MonthReport,
 ) {
     Column(
@@ -70,7 +56,7 @@ fun MonthCommits(
 }
 
 @Composable
-fun CommitBar(
+internal fun CommitBar(
     modifier: Modifier = Modifier,
     barHeight: Dp,
 ) {
@@ -123,7 +109,7 @@ internal fun PreviewRepoDetails() {
 
 @Composable
 @Preview
-fun CommitBarPreview() {
+internal fun CommitBarPreview() {
     CommitBar(
         barHeight = 20.dp,
         modifier = Modifier

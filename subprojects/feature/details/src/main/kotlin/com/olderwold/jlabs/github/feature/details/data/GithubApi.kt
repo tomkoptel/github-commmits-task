@@ -1,6 +1,6 @@
 package com.olderwold.jlabs.github.feature.details.data
 
-import com.olderwold.jlabs.github.feature.details.data.dto.RepoDetailsItem
+import com.olderwold.jlabs.github.feature.details.data.dto.RepoCommitItem
 import com.olderwold.jlabs.github.retrofit.Cacheable
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -30,5 +30,5 @@ internal interface GithubApi {
 
     @Cacheable(until = 5, unit = TimeUnit.MINUTES)
     @GET("/repos/mralexgray/{repo}/commits")
-    suspend fun repoDetails(@Path(value = "repo") repo: String): List<RepoDetailsItem>
+    suspend fun repoDetails(@Path(value = "repo") repo: String): List<RepoCommitItem>
 }
