@@ -5,12 +5,16 @@ import java.time.ZonedDateTime
 internal sealed class RepoDetails(
     open val name: String,
 ) {
-    data class Empty(override val name: String) : RepoDetails(name)
+    abstract val firstCommitDate: ZonedDateTime?
+
+    data class Empty(override val name: String) : RepoDetails(name) {
+        override val firstCommitDate: ZonedDateTime? = null
+    }
 
     data class NonEmpty(
         override val name: String,
         val commits: List<RepoCommit>,
-        val firstCommitDate: ZonedDateTime,
+        override val firstCommitDate: ZonedDateTime,
         val lastCommitDate: ZonedDateTime,
     ) : RepoDetails(name)
 }

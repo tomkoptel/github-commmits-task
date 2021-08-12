@@ -15,7 +15,6 @@ class YearReportTest {
     private val commit2013_3 = RepoCommit(dateTime = ZonedDateTime.parse("2013-10-03T23:58:48Z"))
     private val commit2015 = RepoCommit(dateTime = ZonedDateTime.parse("2015-10-02T23:58:48Z"))
 
-    private val now = LocalDate.of(2015, 12, 28)
     private val factory = YearReport.Factory(
         locale = Locale.US
     )

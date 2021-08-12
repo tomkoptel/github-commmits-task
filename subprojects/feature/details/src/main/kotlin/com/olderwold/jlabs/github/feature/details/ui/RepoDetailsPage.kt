@@ -20,15 +20,15 @@ fun RepoDetailsPage(repoName: String) {
     when (val uiState = viewModel.uiState.collectAsState().value) {
         is RepoDetailsViewModel.UiState.Loaded -> {
             uiState.currentResult.fold(
-                onSuccess = {
-                    RepoDetails(items = it)
+                onSuccess = { yearReport ->
+                    CommitCarousel(yearReport)
                 },
                 onFailure = { currentError ->
                     val previousResult = uiState.previousResult?.getOrNull()
                     if (previousResult == null) {
                         Text(text = "We failed to get results ${currentError.message}")
                     } else {
-                        RepoDetails(items = previousResult)
+                        CommitCarousel(previousResult)
 
                         Snackbar(
                             modifier = Modifier.padding(8.dp)

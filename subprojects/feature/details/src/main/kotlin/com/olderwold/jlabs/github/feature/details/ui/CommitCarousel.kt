@@ -24,11 +24,11 @@ import androidx.compose.ui.unit.dp
 internal val CommitColor = Color(0xff00efce)
 
 @Composable
-internal fun RepoDetails(items: List<MonthReport>) {
+internal fun CommitCarousel(yearReport: YearReport) {
     LazyRow(
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
-        items(items) {
+        items(yearReport.monthReports) {
             MonthCommits(it)
         }
     }
@@ -72,7 +72,8 @@ internal fun CommitBar(
                 .background(Color.Gray),
         )
         Box(
-            modifier = Modifier.height(barHeight)
+            modifier = Modifier
+                .height(barHeight)
                 .fillMaxWidth()
                 .background(CommitColor),
         )
@@ -82,28 +83,32 @@ internal fun CommitBar(
 @Composable
 @Preview(name = "Default")
 internal fun PreviewRepoDetails() {
-    RepoDetails(
-        listOf(
-            MonthReport(
-                totalCommits = 100,
-                commitNumbers = 90,
-                month = "April",
-            ),
-            MonthReport(
-                totalCommits = 100,
-                commitNumbers = 10,
-                month = "March",
-            ),
-            MonthReport(
-                totalCommits = 100,
-                commitNumbers = 10,
-                month = "May",
-            ),
-            MonthReport(
-                totalCommits = 100,
-                commitNumbers = 0,
-                month = "June",
-            ),
+    CommitCarousel(
+        yearReport = YearReport(
+            year = 2015,
+            totalCommits = 400,
+            monthReports = listOf(
+                MonthReport(
+                    totalCommits = 100,
+                    commitNumbers = 90,
+                    month = "April",
+                ),
+                MonthReport(
+                    totalCommits = 100,
+                    commitNumbers = 10,
+                    month = "March",
+                ),
+                MonthReport(
+                    totalCommits = 100,
+                    commitNumbers = 10,
+                    month = "May",
+                ),
+                MonthReport(
+                    totalCommits = 100,
+                    commitNumbers = 0,
+                    month = "June",
+                ),
+            )
         )
     )
 }
