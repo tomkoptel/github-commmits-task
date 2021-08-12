@@ -15,6 +15,9 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
+    }
 }
 
 dependencies {
@@ -45,4 +48,7 @@ dependencies {
     testImplementation(testLibs.kluent)
     testImplementation(libs.kotlinx.coroutinesCore)
     api(libs.kotlinx.coroutinesCoreJvm)
+
+    // Add support for Java 8 Time API
+    coreLibraryDesugaring(libs.androidtools.desugarJdk)
 }

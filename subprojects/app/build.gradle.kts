@@ -49,10 +49,6 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
-
-    compileOptions {
-        isCoreLibraryDesugaringEnabled = true
-    }
 }
 
 dependencies {
@@ -69,7 +65,4 @@ dependencies {
     implementation(libs.androidx.fragment)
 
     implementation(libs.androidx.composeMaterialIcons)
-
-    // Add support for Java 8 Time API
-    coreLibraryDesugaring(libs.androidtools.desugarJdk)
 }
