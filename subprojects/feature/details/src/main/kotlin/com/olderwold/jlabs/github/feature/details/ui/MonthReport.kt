@@ -5,7 +5,7 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.olderwold.jlabs.github.feature.details.domain.RepoDetails
 
-data class MonthReport(
+internal data class MonthReport(
     val totalCommits: Int,
     val commitNumbers: Int,
     val month: String,
