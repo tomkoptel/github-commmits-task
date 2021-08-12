@@ -5,4 +5,3 @@ internal interface GetDetails {
         repoName: String
     ): RepoDetails
 }
-

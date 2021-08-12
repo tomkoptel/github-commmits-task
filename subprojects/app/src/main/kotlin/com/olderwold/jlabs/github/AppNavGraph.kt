@@ -23,7 +23,7 @@ fun AppNavGraph(
                 navigateToCommits = actions.navigateToCommits
             )
         }
-        composable(MainDestinations.COMMITS_PATH) {  backStackEntry ->
+        composable(MainDestinations.COMMITS_PATH) { backStackEntry ->
             val repoName = backStackEntry.arguments
                 ?.getString(MainDestinations.REPO_NAME_KEY)
                 .let { requireNotNull(it) { "Can not navigate to details without repoName" } }

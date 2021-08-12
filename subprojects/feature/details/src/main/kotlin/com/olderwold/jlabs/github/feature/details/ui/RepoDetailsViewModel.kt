@@ -42,7 +42,7 @@ internal class RepoDetailsViewModel(
     }
 
     private fun emitState(result: Result<List<MonthReport>>) {
-        val previousResult = requireNotNull(_uiState.value) {"Should be set by default"}
+        val previousResult = requireNotNull(_uiState.value) { "Should be set by default" }
         _uiState.value = previousResult.reduce(UiState.Loaded(currentResult = result))
     }
 

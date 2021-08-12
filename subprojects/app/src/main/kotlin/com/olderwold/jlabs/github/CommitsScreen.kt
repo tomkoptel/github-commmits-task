@@ -23,14 +23,16 @@ fun CommitsScreen(
         scaffoldState = scaffoldState,
         topBar = {
             InsetAwareTopAppBar(
-                title = { Text(text = repoName) }, navigationIcon = {
+                title = { Text(text = repoName) },
+                navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(
                             imageVector = Icons.Filled.ArrowBack,
                             contentDescription = stringResource(R.string.navigate_up)
                         )
                     }
-                })
+                }
+            )
         }
     ) {
         RepoDetailsPage(repoName)
