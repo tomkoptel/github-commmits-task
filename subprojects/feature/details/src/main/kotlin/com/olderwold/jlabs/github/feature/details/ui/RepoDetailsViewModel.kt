@@ -7,12 +7,12 @@ import androidx.lifecycle.viewModelScope
 import com.olderwold.jlabs.github.feature.details.data.GithubApi
 import com.olderwold.jlabs.github.feature.details.data.NetworkGetDetails
 import com.olderwold.jlabs.github.feature.details.domain.GetDetails
+import java.time.LocalDate
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.time.LocalDate
 
 internal class RepoDetailsViewModel(
     private val getDetails: GetDetails,

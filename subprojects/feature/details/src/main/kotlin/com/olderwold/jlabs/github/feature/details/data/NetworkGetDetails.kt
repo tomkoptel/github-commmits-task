@@ -7,7 +7,7 @@ internal class NetworkGetDetails(
     private val githubApi: GithubApi,
     private val repoDetailsFactory: RepoDetailsFactory,
 ) : GetDetails {
-    constructor(githubApi: GithubApi): this(githubApi, RepoDetailsFactory())
+    constructor(githubApi: GithubApi) : this(githubApi, RepoDetailsFactory())
 
     override suspend fun invoke(
         repoName: String

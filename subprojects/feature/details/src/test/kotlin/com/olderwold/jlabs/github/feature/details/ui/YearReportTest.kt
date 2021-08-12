@@ -2,12 +2,11 @@ package com.olderwold.jlabs.github.feature.details.ui
 
 import com.olderwold.jlabs.github.feature.details.domain.RepoCommit
 import com.olderwold.jlabs.github.feature.details.domain.RepoDetails
+import java.time.ZonedDateTime
+import java.util.Locale
 import org.amshove.kluent.shouldBe
 import org.amshove.kluent.shouldContain
 import org.junit.Test
-import java.time.LocalDate
-import java.time.ZonedDateTime
-import java.util.Locale
 
 class YearReportTest {
     private val commit2013_1 = RepoCommit(dateTime = ZonedDateTime.parse("2013-09-02T23:58:48Z"))

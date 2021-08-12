@@ -5,11 +5,11 @@ import com.olderwold.jlabs.github.feature.details.data.dto.Committer
 import com.olderwold.jlabs.github.feature.details.data.dto.RepoCommitItem
 import com.olderwold.jlabs.github.feature.details.domain.RepoCommit
 import com.olderwold.jlabs.github.feature.details.domain.RepoDetails
+import java.time.ZonedDateTime
 import org.amshove.kluent.shouldBeEqualTo
 import org.amshove.kluent.shouldBeInstanceOf
 import org.amshove.kluent.shouldContain
 import org.junit.Test
-import java.time.ZonedDateTime
 
 class RepoDetailsFactoryTest {
     private val factory = RepoDetailsFactory()
@@ -19,9 +19,12 @@ class RepoDetailsFactoryTest {
 
     @Test
     fun `for invalid commit date should filter result`() {
-        val repoDetails = factory.create(name = "?", commitsData = listOf(
-            commitDTO(date = "I am incorrect date time with zone")
-        ))
+        val repoDetails = factory.create(
+            name = "?",
+            commitsData = listOf(
+                commitDTO(date = "I am incorrect date time with zone")
+            )
+        )
         repoDetails.shouldBeInstanceOf(RepoDetails.Empty::class)
     }
 
@@ -65,7 +68,7 @@ class RepoDetailsFactoryTest {
         commitsData = commitsData,
     ) as RepoDetails.NonEmpty
 
-    private fun commitDTO(date: String) : RepoCommitItem = RepoCommitItem(
+    private fun commitDTO(date: String): RepoCommitItem = RepoCommitItem(
         commit = Commit(committer = Committer(date = date))
     )
 }
