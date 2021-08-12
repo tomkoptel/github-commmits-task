@@ -2,7 +2,7 @@ package com.olderwold.jlabs.github.feature.details.data.dto
 
 import com.google.gson.annotations.SerializedName
 
-internal data class RepoDetailsItem(
+internal data class RepoCommitItem(
     @SerializedName("author")
     val author: Author? = null,
     @SerializedName("comments_url")

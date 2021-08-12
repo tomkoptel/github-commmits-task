@@ -43,7 +43,7 @@ dependencies {
     implementation(libs.androidx.composeFoundation)
     implementation(libs.androidx.composeFoundationLayout)
     implementation(libs.androidx.composeMaterial)
-    api(libs.androidx.composeUiTooling)
+    api(libs.androidx.composeUiToolingPreview)
 
     testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.okreplay)

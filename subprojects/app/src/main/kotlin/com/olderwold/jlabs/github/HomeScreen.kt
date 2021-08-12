@@ -1,6 +1,5 @@
 package com.olderwold.jlabs.github
 
-import android.widget.Toast
 import androidx.compose.material.Scaffold
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.Text
@@ -16,6 +15,7 @@ import com.olderwold.jlabs.github.feature.repos.ui.RepoPage
 @Composable
 fun HomeScreen(
     scaffoldState: ScaffoldState = rememberScaffoldState(),
+    navigateToCommits: (String) -> Unit,
 ) {
     val activity = requireNotNull(LocalContext.current as? FragmentActivity) {
         "Failed to acquire Activity context."
@@ -29,8 +29,9 @@ fun HomeScreen(
             InsetAwareTopAppBar(title = { Text(text = title) })
         }
     ) {
-        RepoPage(viewModelProvider = viewModelProvider, onItemClicked = { repoName ->
-            Toast.makeText(activity, repoName, Toast.LENGTH_SHORT).show()
-        })
+        RepoPage(
+            viewModelProvider = viewModelProvider,
+            onItemClicked = navigateToCommits
+        )
     }
 }
