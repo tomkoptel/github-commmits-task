@@ -41,6 +41,7 @@ dependencies {
     implementation(libs.androidx.lifecycleViewmodelCompose)
     api(libs.androidx.lifecycleViewmodel)
     implementation(libs.androidx.lifecycleViewmodelKtx)
+    implementation(libs.androidx.core)
 
     testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.okreplay)
