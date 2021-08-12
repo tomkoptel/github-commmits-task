@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 
+@Suppress("MagicNumber")
 internal val CommitColor = Color(0xff00efce)
 
 @Composable

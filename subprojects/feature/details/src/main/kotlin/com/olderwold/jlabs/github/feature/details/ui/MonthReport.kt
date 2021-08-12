@@ -22,6 +22,8 @@ data class MonthReport(
         private val application: Application,
     ) {
         fun create(repoDetails: RepoDetails): List<MonthReport> {
+            application.resources.configuration
+            repoDetails.toString()
             return emptyList()
         }
     }
