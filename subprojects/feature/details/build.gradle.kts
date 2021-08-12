@@ -33,6 +33,7 @@ dependencies {
     implementation(libs.androidx.composeFoundation)
     implementation(libs.androidx.composeFoundationLayout)
     implementation(libs.androidx.composeMaterial)
+    implementation(libs.androidx.composeUiToolingPreview)
 
     implementation(libs.androidx.lifecycleViewmodelCompose)
     api(libs.androidx.lifecycleViewmodel)
