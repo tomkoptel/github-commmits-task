@@ -25,7 +25,7 @@ dependencies {
     implementation(libs.retrofit2.gson)
     implementation(libs.gson)
 
-    implementation(libs.androidx.composeUi)
+    api(libs.androidx.composeUi)
     implementation(libs.androidx.composeUiGraphics)
     implementation(libs.androidx.composeUiText)
     implementation(libs.androidx.composeUiUnit)
@@ -33,14 +33,15 @@ dependencies {
     implementation(libs.androidx.composeFoundation)
     implementation(libs.androidx.composeFoundationLayout)
     implementation(libs.androidx.composeMaterial)
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:1.0.0-alpha07")
 
-    api(libs.androidx.composeUiTooling)
+    implementation(libs.androidx.lifecycleViewmodelCompose)
+    api(libs.androidx.lifecycleViewmodel)
+    implementation(libs.androidx.lifecycleViewmodelKtx)
 
     testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.okreplay)
     testImplementation(testLibs.junit4)
     testImplementation(testLibs.kluent)
     testImplementation(libs.kotlinx.coroutinesCore)
-    testImplementation(libs.kotlinx.coroutinesCoreJvm)
+    api(libs.kotlinx.coroutinesCoreJvm)
 }
