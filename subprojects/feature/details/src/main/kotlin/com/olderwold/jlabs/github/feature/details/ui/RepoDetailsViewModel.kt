@@ -3,18 +3,21 @@ package com.olderwold.jlabs.github.feature.details.ui
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.olderwold.jlabs.github.feature.details.BuildConfig
 import com.olderwold.jlabs.github.feature.details.data.GithubApi
 import com.olderwold.jlabs.github.feature.details.data.NetworkGetDetails
 import com.olderwold.jlabs.github.feature.details.domain.GetDetails
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import com.olderwold.jlabs.github.interval
+import kotlinx.coroutines.FlowPreview
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import okhttp3.logging.HttpLoggingInterceptor
 import java.time.LocalDate
+import java.util.concurrent.TimeUnit
 
 internal class RepoDetailsViewModel(
     private val getDetails: GetDetails,
@@ -27,32 +30,63 @@ internal class RepoDetailsViewModel(
      */
     private var initialized: Boolean = false
 
-    private val _uiState = MutableStateFlow<UiState>(UiState.Loading)
-    val uiState: StateFlow<UiState> = _uiState
+    var uiState: Flow<UiState> = emptyFlow()
+        private set
 
+    @FlowPreview
     fun init(repoName: String) {
         if (initialized) return
-        loadDetails(repoName)
+        startTimedUpdates(repoName)
         initialized = true
     }
 
-    private fun loadDetails(repoName: String) = viewModelScope.launch {
-        withContext(Dispatchers.Default) {
-            runCatching { getDetails(repoName) }
-                .map { details ->
-                    val year = details.firstCommitDate?.year ?: LocalDate.now().year
-                    yearReportFactory.create(details, year)
-                }
-                .let(::emitState)
+    private fun startTimedUpdates(repoName: String) {
+        var previousState: UiState? = null
+        uiState = interval(delay = 1500, unit = TimeUnit.MILLISECONDS)
+            .flatMapConcat {
+                computeUiState(previousState, repoName)
+                    .map { newState ->
+                        previousState = newState
+                        newState
+                    }
+            }
+            .distinctUntilChanged { old, new ->
+                old.areContentsTheSame(new)
+            }
+    }
+
+    private fun computeUiState(
+        previousState: UiState?,
+        repoName: String
+    ): Flow<UiState> = flow {
+        val newResult = runCatching { getDetails(repoName) }
+            .map { details ->
+                val year = details.firstCommitDate?.year ?: LocalDate.now().year
+                yearReportFactory.create(details, year)
+            }
+        if (previousState == null) {
+            UiState.Loaded(currentResult = newResult)
+        } else {
+            previousState.reduce(UiState.Loaded(currentResult = newResult))
         }
     }
 
-    private fun emitState(result: Result<YearReport>) {
-        val previousResult = requireNotNull(_uiState.value) { "Should be set by default" }
-        _uiState.value = previousResult.reduce(UiState.Loaded(currentResult = result))
-    }
-
     sealed class UiState {
+        fun areContentsTheSame(new: UiState): Boolean = when (val previous = this) {
+            is Loaded -> {
+                when (new) {
+                    is Loaded -> new.currentResult == previous.currentResult
+                    Loading -> false
+                }
+            }
+            Loading -> {
+                when (new) {
+                    is Loaded -> false
+                    Loading -> true
+                }
+            }
+        }
+
         fun reduce(new: UiState): UiState = when (val previous = this) {
             is Loaded -> {
                 when (new) {
