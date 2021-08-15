@@ -56,7 +56,7 @@ internal class YearReportViewModel(
                 old.areContentsTheSame(new)
             }
 
-        uiState = emitThenDelay(delay = 1500, unit = TimeUnit.MILLISECONDS)
+        uiState = emitThenDelay(delay = 15, unit = TimeUnit.SECONDS)
             .flatMapConcat { requestCommits }
             .shareIn(
                 scope = viewModelScope,
@@ -73,6 +73,7 @@ internal class YearReportViewModel(
                 val year = details.firstCommitDate?.year ?: LocalDate.now().year
                 yearReportFactory.create(details, year)
             }
+            .toSafeResult()
         previousState.reduce(
             YearReportUiState.Loaded(currentResult = newResult)
         ).let { emit(it) }

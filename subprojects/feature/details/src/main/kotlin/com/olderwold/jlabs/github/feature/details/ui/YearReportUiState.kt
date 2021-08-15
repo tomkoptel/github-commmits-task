@@ -4,7 +4,7 @@ internal sealed class YearReportUiState {
     fun areContentsTheSame(new: YearReportUiState): Boolean = when (val previous = this) {
         is Loaded -> {
             when (new) {
-                is Loaded -> new.currentResult.getOrNull() == previous.currentResult.getOrNull()
+                is Loaded -> new.currentResult == previous.currentResult
                 Loading -> false
             }
         }
@@ -19,7 +19,24 @@ internal sealed class YearReportUiState {
     fun reduce(new: YearReportUiState): YearReportUiState = when (val previous = this) {
         is Loaded -> {
             when (new) {
-                is Loaded -> new.copy(previousResult = previous.currentResult)
+                is Loaded -> {
+                    val newResult: SafeResult<YearReport> = new.currentResult
+                    val previousResult: SafeResult<YearReport> = previous.currentResult
+
+                    when (newResult) {
+                        is SafeResult.Error -> when (previousResult) {
+                            is SafeResult.Error -> {
+                                new.copy(previousResult = previousResult)
+                            }
+                            is SafeResult.Ok -> {
+                                previous
+                            }
+                        }
+                        is SafeResult.Ok -> {
+                            new.copy(previousResult = previousResult)
+                        }
+                    }
+                }
                 Loading -> new
             }
         }
@@ -34,7 +51,7 @@ internal sealed class YearReportUiState {
     object Loading : YearReportUiState()
 
     data class Loaded(
-        val previousResult: Result<YearReport>? = null,
-        val currentResult: Result<YearReport>,
+        val previousResult: SafeResult<YearReport>? = null,
+        val currentResult: SafeResult<YearReport>,
     ) : YearReportUiState()
 }

@@ -6,8 +6,8 @@ import org.amshove.kluent.shouldBeTrue
 import org.junit.Test
 
 class YearReportUiStateTest {
-    private val year2020 = Result.success(YearReport(year = 2020))
-    private val year2021 = Result.success(YearReport(year = 2021))
+    private val year2020 = SafeResult.Ok(YearReport(year = 2020))
+    private val year2021 = SafeResult.Ok(YearReport(year = 2021))
 
     @Test
     fun `current=loading and next=loading contents the same`() {
@@ -103,5 +103,21 @@ class YearReportUiStateTest {
             previousResult = year2020,
             currentResult = year2021
         ).reduce(YearReportUiState.Loading) shouldBeEqualTo YearReportUiState.Loading
+    }
+
+    @Test
+    fun `when reduce new error state to previous successful`() {
+        val previousResultSuccess = YearReportUiState.Loaded(
+            previousResult = null,
+            currentResult = year2020
+        )
+        val newResultIsError = YearReportUiState.Loaded(
+            previousResult = null,
+            currentResult = SafeResult.Error(NullPointerException("Ops!"))
+        )
+        previousResultSuccess.reduce(newResultIsError) shouldBeEqualTo YearReportUiState.Loaded(
+            previousResult = null,
+            currentResult = year2020
+        )
     }
 }
