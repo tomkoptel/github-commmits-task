@@ -13,6 +13,8 @@ internal data class YearReport(
     val totalCommits: Int = 0,
     val monthReports: List<MonthReport> = emptyList(),
 ) {
+    fun isEmpty(): Boolean = monthReports.isEmpty()
+
     class Factory(
         private val locale: Locale,
     ) {

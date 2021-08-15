@@ -24,8 +24,12 @@ import androidx.compose.ui.unit.dp
 internal val CommitColor = Color(0xff00efce)
 
 @Composable
-internal fun CommitCarousel(yearReport: YearReport) {
+internal fun CommitCarousel(
+    yearReport: YearReport,
+    modifier: Modifier = Modifier
+ ) {
     LazyRow(
+        modifier = modifier,
         horizontalArrangement = Arrangement.spacedBy(4.dp),
     ) {
         items(yearReport.monthReports) {

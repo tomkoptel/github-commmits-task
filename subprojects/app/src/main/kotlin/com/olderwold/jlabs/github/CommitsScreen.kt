@@ -1,5 +1,7 @@
 package com.olderwold.jlabs.github
 
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Icon
 import androidx.compose.material.IconButton
 import androidx.compose.material.Scaffold
@@ -9,7 +11,9 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import com.olderwold.jlabs.github.components.InsetAwareTopAppBar
 import com.olderwold.jlabs.github.feature.details.ui.RepoDetailsPage
 
@@ -35,6 +39,10 @@ fun CommitsScreen(
             )
         }
     ) {
-        RepoDetailsPage(repoName)
+        RepoDetailsPage(
+            repoName, modifier = Modifier
+                .fillMaxSize()
+                .padding(all = 16.dp)
+        )
     }
 }
