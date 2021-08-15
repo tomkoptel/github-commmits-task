@@ -3,6 +3,7 @@ package com.olderwold.jlabs.github.feature.details.ui
 import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
 import com.olderwold.jlabs.github.feature.details.BuildConfig
 import com.olderwold.jlabs.github.feature.details.data.GithubApi
 import com.olderwold.jlabs.github.feature.details.data.NetworkGetDetails
@@ -10,11 +11,14 @@ import com.olderwold.jlabs.github.feature.details.domain.GetDetails
 import com.olderwold.jlabs.github.interval
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.shareIn
 import okhttp3.logging.HttpLoggingInterceptor
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
@@ -30,7 +34,7 @@ internal class RepoDetailsViewModel(
      */
     private var initialized: Boolean = false
 
-    var uiState: Flow<UiState> = emptyFlow()
+    var uiState: SharedFlow<UiState> = MutableStateFlow(UiState.Loading)
         private set
 
     @FlowPreview
@@ -41,7 +45,7 @@ internal class RepoDetailsViewModel(
     }
 
     private fun startTimedUpdates(repoName: String) {
-        var previousState: UiState? = null
+        var previousState: UiState = UiState.Loading
         uiState = interval(delay = 1500, unit = TimeUnit.MILLISECONDS)
             .flatMapConcat {
                 computeUiState(previousState, repoName)
@@ -53,6 +57,10 @@ internal class RepoDetailsViewModel(
             .distinctUntilChanged { old, new ->
                 old.areContentsTheSame(new)
             }
+            .shareIn(
+                scope = viewModelScope,
+                started = SharingStarted.Lazily
+            )
     }
 
     private fun computeUiState(
