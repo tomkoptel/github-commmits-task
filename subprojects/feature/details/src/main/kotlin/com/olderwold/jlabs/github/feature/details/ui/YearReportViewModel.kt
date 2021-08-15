@@ -4,11 +4,11 @@ import android.app.Application
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.olderwold.jlabs.github.emitThenDelay
 import com.olderwold.jlabs.github.feature.details.BuildConfig
 import com.olderwold.jlabs.github.feature.details.data.GithubApi
 import com.olderwold.jlabs.github.feature.details.data.NetworkGetDetails
 import com.olderwold.jlabs.github.feature.details.domain.GetDetails
-import com.olderwold.jlabs.github.interval
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.SharingStarted
@@ -47,17 +47,17 @@ internal class YearReportViewModel(
 
     private fun startTimedUpdates(repoName: String) {
         var previousState: YearReportUiState = defaultState
-        uiState = interval(delay = 1500, unit = TimeUnit.MILLISECONDS)
-            .flatMapConcat {
-                computeUiState(previousState, repoName)
-                    .map { newState ->
-                        previousState = newState
-                        newState
-                    }
+        val requestCommits = computeUiState(previousState, repoName)
+            .map { newState ->
+                previousState = newState
+                newState
             }
             .distinctUntilChanged { old, new ->
                 old.areContentsTheSame(new)
             }
+
+        uiState = emitThenDelay(delay = 1500, unit = TimeUnit.MILLISECONDS)
+            .flatMapConcat { requestCommits }
             .shareIn(
                 scope = viewModelScope,
                 started = SharingStarted.Lazily
