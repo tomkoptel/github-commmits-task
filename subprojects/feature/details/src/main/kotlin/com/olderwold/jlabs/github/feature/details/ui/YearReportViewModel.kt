@@ -56,6 +56,8 @@ internal class YearReportViewModel(
                 old.areContentsTheSame(new)
             }
 
+        // Making call 1.5 seconds will be recognized by Github as DDOS attack
+        // Its been increased up to 15 sec
         uiState = emitThenDelay(delay = 15, unit = TimeUnit.SECONDS)
             .flatMapConcat { requestCommits }
             .shareIn(
