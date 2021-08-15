@@ -11,10 +11,9 @@ import com.olderwold.jlabs.github.feature.details.domain.GetDetails
 import com.olderwold.jlabs.github.interval
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
@@ -23,7 +22,8 @@ import okhttp3.logging.HttpLoggingInterceptor
 import java.time.LocalDate
 import java.util.concurrent.TimeUnit
 
-internal class RepoDetailsViewModel(
+@OptIn(FlowPreview::class)
+internal class YearReportViewModel(
     private val getDetails: GetDetails,
     private val yearReportFactory: YearReport.Factory,
 ) : ViewModel() {
@@ -34,10 +34,11 @@ internal class RepoDetailsViewModel(
      */
     private var initialized: Boolean = false
 
-    var uiState: SharedFlow<UiState> = MutableStateFlow(UiState.Loading)
+    var uiState: Flow<YearReportUiState> = emptyFlow()
         private set
 
-    @FlowPreview
+    val defaultState: YearReportUiState = YearReportUiState.Loading
+
     fun init(repoName: String) {
         if (initialized) return
         startTimedUpdates(repoName)
@@ -45,7 +46,7 @@ internal class RepoDetailsViewModel(
     }
 
     private fun startTimedUpdates(repoName: String) {
-        var previousState: UiState = UiState.Loading
+        var previousState: YearReportUiState = defaultState
         uiState = interval(delay = 1500, unit = TimeUnit.MILLISECONDS)
             .flatMapConcat {
                 computeUiState(previousState, repoName)
@@ -64,58 +65,17 @@ internal class RepoDetailsViewModel(
     }
 
     private fun computeUiState(
-        previousState: UiState?,
+        previousState: YearReportUiState,
         repoName: String
-    ): Flow<UiState> = flow {
+    ): Flow<YearReportUiState> = flow {
         val newResult = runCatching { getDetails(repoName) }
             .map { details ->
                 val year = details.firstCommitDate?.year ?: LocalDate.now().year
                 yearReportFactory.create(details, year)
             }
-        if (previousState == null) {
-            UiState.Loaded(currentResult = newResult)
-        } else {
-            previousState.reduce(UiState.Loaded(currentResult = newResult))
-        }
-    }
-
-    sealed class UiState {
-        fun areContentsTheSame(new: UiState): Boolean = when (val previous = this) {
-            is Loaded -> {
-                when (new) {
-                    is Loaded -> new.currentResult == previous.currentResult
-                    Loading -> false
-                }
-            }
-            Loading -> {
-                when (new) {
-                    is Loaded -> false
-                    Loading -> true
-                }
-            }
-        }
-
-        fun reduce(new: UiState): UiState = when (val previous = this) {
-            is Loaded -> {
-                when (new) {
-                    is Loaded -> new.copy(previousResult = previous.currentResult)
-                    Loading -> new
-                }
-            }
-            Loading -> {
-                when (new) {
-                    is Loaded -> new
-                    Loading -> new
-                }
-            }
-        }
-
-        object Loading : UiState()
-
-        data class Loaded(
-            val previousResult: Result<YearReport>? = null,
-            val currentResult: Result<YearReport>,
-        ) : UiState()
+        previousState.reduce(
+            YearReportUiState.Loaded(currentResult = newResult)
+        ).let { emit(it) }
     }
 
     class Factory(
@@ -133,7 +93,7 @@ internal class RepoDetailsViewModel(
             })
             val getDetails = NetworkGetDetails(githubApi)
             val factory = YearReport.Factory(application)
-            val repoDetailsViewModel = RepoDetailsViewModel(getDetails, factory)
+            val repoDetailsViewModel = YearReportViewModel(getDetails, factory)
             repoDetailsViewModel.init(repoName)
             return repoDetailsViewModel as T
         }

@@ -23,11 +23,11 @@ fun RepoDetailsPage(
     modifier: Modifier = Modifier,
 ) {
     val application = LocalContext.current.applicationContext as Application
-    val viewModel = viewModel<RepoDetailsViewModel>(
-        factory = RepoDetailsViewModel.Factory(application, repoName)
+    val viewModel = viewModel<YearReportViewModel>(
+        factory = YearReportViewModel.Factory(application, repoName)
     )
-    when (val uiState = viewModel.uiState.collectAsState().value) {
-        is RepoDetailsViewModel.UiState.Loaded -> {
+    when (val uiState = viewModel.uiState.collectAsState(viewModel.defaultState).value) {
+        is YearReportUiState.Loaded -> {
             uiState.currentResult.fold(
                 onSuccess = { yearReport ->
                     if (yearReport.isEmpty()) {
@@ -52,7 +52,7 @@ fun RepoDetailsPage(
                 }
             )
         }
-        RepoDetailsViewModel.UiState.Loading -> {
+        YearReportUiState.Loading -> {
             Text(text = "Loading details...")
         }
     }
