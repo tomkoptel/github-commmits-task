@@ -16,6 +16,7 @@ internal sealed class YearReportUiState {
         }
     }
 
+    @Suppress("NestedBlockDepth")
     fun reduce(new: YearReportUiState): YearReportUiState = when (val previous = this) {
         is Loaded -> {
             when (new) {

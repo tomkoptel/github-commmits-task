@@ -18,6 +18,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.olderwold.jlabs.github.feature.details.R
 
 @Composable
+@Suppress("NestedBlockDepth")
 fun RepoDetailsPage(
     repoName: String,
     modifier: Modifier = Modifier,
