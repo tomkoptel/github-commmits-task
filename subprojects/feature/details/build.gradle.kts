@@ -11,6 +11,7 @@ plugins {
 android {
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
@@ -24,6 +25,7 @@ dependencies {
     api(project(":retrofit-cache"))
 
     api(libs.okhttp3.core)
+    implementation(libs.okhttp3.interceptor)
     api(libs.retrofit2.core)
     implementation(libs.retrofit2.gson)
     implementation(libs.gson)
