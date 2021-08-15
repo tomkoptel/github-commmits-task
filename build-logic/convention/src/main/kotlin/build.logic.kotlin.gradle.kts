@@ -7,9 +7,11 @@ tasks.withType<KotlinCompile>().configureEach {
         allWarningsAsErrors = warningsAsErrors.toBoolean()
 
         freeCompilerArgs = freeCompilerArgs + listOf(
-                "-Xopt-in=kotlin.RequiresOptIn",
-                // Enable experimental coroutines APIs, including Flow
-                "-Xopt-in=kotlin.Experimental",
+            "-Xopt-in=kotlin.RequiresOptIn",
+            // Enable experimental coroutines APIs, including Flow
+            "-Xopt-in=kotlin.Experimental",
+            // Enable flow preview API
+            "-Xopt-in=kotlinx.coroutines.FlowPreview",
         )
 
         freeCompilerArgs = freeCompilerArgs + "-Xopt-in=kotlin.Experimental"

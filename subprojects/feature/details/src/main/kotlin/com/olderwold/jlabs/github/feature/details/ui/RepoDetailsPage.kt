@@ -18,41 +18,49 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.olderwold.jlabs.github.feature.details.R
 
 @Composable
+@Suppress("NestedBlockDepth")
 fun RepoDetailsPage(
     repoName: String,
     modifier: Modifier = Modifier,
 ) {
     val application = LocalContext.current.applicationContext as Application
-    val viewModel = viewModel<RepoDetailsViewModel>(
-        factory = RepoDetailsViewModel.Factory(application, repoName)
+    val viewModel = viewModel<YearReportViewModel>(
+        factory = YearReportViewModel.Factory(application, repoName)
     )
-    when (val uiState = viewModel.uiState.collectAsState().value) {
-        is RepoDetailsViewModel.UiState.Loaded -> {
-            uiState.currentResult.fold(
-                onSuccess = { yearReport ->
-                    if (yearReport.isEmpty()) {
+    when (val uiState = viewModel.uiState.collectAsState(viewModel.defaultState).value) {
+        is YearReportUiState.Loaded -> {
+            when (val currentResult = uiState.currentResult) {
+                is SafeResult.Ok -> {
+                    if (currentResult.data.isEmpty()) {
                         NoCommits()
                     } else {
-                        CommitCarousel(yearReport, modifier = modifier)
+                        CommitCarousel(currentResult.data, modifier = modifier)
                     }
-                },
-                onFailure = { currentError ->
-                    val previousResult = uiState.previousResult?.getOrNull()
+                }
+                is SafeResult.Error -> {
+                    val previousResult = uiState.previousResult
                     if (previousResult == null) {
-                        Text(text = "We failed to get results ${currentError.message}")
+                        Text(text = "We failed to get results ${currentResult.throwable.message}")
                     } else {
-                        CommitCarousel(previousResult)
+                        when (previousResult) {
+                            is SafeResult.Error -> {
+                                Text(text = "We failed to get results ${currentResult.throwable.message}")
+                            }
+                            is SafeResult.Ok -> {
+                                CommitCarousel(previousResult.data)
 
-                        Snackbar(
-                            modifier = Modifier.padding(8.dp)
-                        ) {
-                            Text(text = "Failed to get an update ${currentError.message}")
+                                Snackbar(
+                                    modifier = Modifier.padding(8.dp)
+                                ) {
+                                    Text(text = "Failed to get an update ${currentResult.throwable.message}")
+                                }
+                            }
                         }
                     }
                 }
-            )
+            }
         }
-        RepoDetailsViewModel.UiState.Loading -> {
+        YearReportUiState.Loading -> {
             Text(text = "Loading details...")
         }
     }
