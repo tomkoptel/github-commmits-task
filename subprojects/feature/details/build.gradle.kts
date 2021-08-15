@@ -11,9 +11,14 @@ plugins {
 android {
     buildFeatures {
         compose = true
+        buildConfig = true
+        resValues = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
+    }
+    compileOptions {
+        isCoreLibraryDesugaringEnabled = true
     }
 }
 
@@ -21,6 +26,7 @@ dependencies {
     api(project(":retrofit-cache"))
 
     api(libs.okhttp3.core)
+    implementation(libs.okhttp3.interceptor)
     api(libs.retrofit2.core)
     implementation(libs.retrofit2.gson)
     implementation(libs.gson)
@@ -38,6 +44,7 @@ dependencies {
     implementation(libs.androidx.lifecycleViewmodelCompose)
     api(libs.androidx.lifecycleViewmodel)
     implementation(libs.androidx.lifecycleViewmodelKtx)
+    implementation(libs.androidx.core)
 
     testImplementation(project(":test-tape"))
     testImplementation(testLibs.bundles.okreplay)
@@ -45,4 +52,7 @@ dependencies {
     testImplementation(testLibs.kluent)
     testImplementation(libs.kotlinx.coroutinesCore)
     api(libs.kotlinx.coroutinesCoreJvm)
+
+    // Add support for Java 8 Time API
+    coreLibraryDesugaring(libs.androidtools.desugarJdk)
 }
