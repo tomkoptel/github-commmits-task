@@ -3,6 +3,7 @@ package com.olderwold.jlabs.github.wrike
 import android.content.Context
 import android.os.Bundle
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -59,12 +60,24 @@ class MainFragment : Fragment() {
 class MainViewModel : ViewModel() {
     val dataLive = MutableLiveData<MutableList<Data>>()
 
-    init {
-        Thread {
+    private val thread: Thread
+        get() = Thread {
             dataLive.value?.clear()
-            dataLive.value =
-                dataLive.value?.apply { addAll(remoteRequestForData().map { Data(it) }) }
-        }.start()
+            dataLive.value = dataLive.value?.apply {
+                addAll(remoteRequestForData().map { Data(it) })
+            }
+        }
+
+    init {
+        thread.start()
+    }
+
+    override fun onCleared() {
+        try {
+            thread.join()
+        } catch (ex: InterruptedException) {
+            Log.d("MainViewModel", "onCleared() thread was interrupted", ex)
+        }
     }
 
     private fun remoteRequestForData(): MutableList<String> {
