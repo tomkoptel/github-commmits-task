@@ -65,4 +65,6 @@ dependencies {
     implementation(libs.androidx.fragment)
 
     implementation(libs.androidx.composeMaterialIcons)
+    implementation("androidx.recyclerview:recyclerview:1.2.1")
+    implementation("androidx.fragment:fragment-ktx:1.3.6")
 }
