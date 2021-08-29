@@ -85,8 +85,8 @@ class MainViewModel : ViewModel() {
         }
     }
 
-    private fun remoteRequestForData(): MutableList<String> {
-        return mutableListOf("Mesocricetus auratus", "Phodopus sungorus", "Phodopus campbelli")
+    private fun remoteRequestForData(): List<String> {
+        return listOf("Mesocricetus auratus", "Phodopus sungorus", "Phodopus campbelli")
     }
 
     fun filter(query: String) {
