@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
+import androidx.annotation.UiThread
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -18,6 +19,7 @@ import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
+import java.util.concurrent.atomic.AtomicReference
 
 // Fragment display recycler view with a list of items
 // User has ability to filter items
@@ -61,16 +63,21 @@ class MainFragment : Fragment() {
 }
 
 class MainViewModel : ViewModel() {
-    private val _dataLive = MutableLiveData<List<Data>>(emptyList())
+    private val _data = AtomicReference<List<Data>>(emptyList())
+    private val dataList: List<Data> get() = _data.get()
+    private val _dataLive = MutableLiveData(dataList)
 
     val dataLive: LiveData<List<Data>> = _dataLive
 
     private val thread: Thread
         get() = Thread {
-            val newData = remoteRequestForData().map { Data(it) }
+            val newData = remoteRequestForData()
+                .map { Data(it) }
+                .let(Collections::unmodifiableList)
+            _data.set(newData)
 
             // We need to make sure we post to UI thread
-            _dataLive.postValue(Collections.unmodifiableList(newData))
+            _dataLive.postValue(newData)
         }
 
     init {
@@ -89,8 +96,10 @@ class MainViewModel : ViewModel() {
         return listOf("Mesocricetus auratus", "Phodopus sungorus", "Phodopus campbelli")
     }
 
+    @UiThread
     fun filter(query: String) {
-        dataLive.value?.filter { it.title.contains(query) }
+        val filteredData = dataList.filter { data -> data.title.contains(query) }
+        _dataLive.value = filteredData
     }
 
     // Single item data class
