@@ -12,6 +12,7 @@ import android.widget.TextView
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
@@ -58,14 +59,16 @@ class MainFragment : Fragment() {
 }
 
 class MainViewModel : ViewModel() {
-    val dataLive = MutableLiveData<MutableList<Data>>()
+    private val _dataLive = MutableLiveData<List<Data>>(emptyList())
+
+    val dataLive: LiveData<List<Data>> = _dataLive
 
     private val thread: Thread
         get() = Thread {
-            dataLive.value?.clear()
-            dataLive.value = dataLive.value?.apply {
-                addAll(remoteRequestForData().map { Data(it) })
-            }
+            val newData = remoteRequestForData().map { Data(it) }
+
+            // We need to make sure we post to UI thread
+            _dataLive.postValue(newData)
         }
 
     init {
