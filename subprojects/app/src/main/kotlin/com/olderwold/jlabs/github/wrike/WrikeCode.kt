@@ -47,8 +47,10 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = Adapter(this)
         binding.recycler.adapter = adapter
-        viewModel.dataLive.observe(viewLifecycleOwner) {
-            adapter.items = it
+        viewModel.dataLive.observe(viewLifecycleOwner) { data ->
+            adapter.submitList(requireNotNull(data) {
+                "Make sure that we don't instantiate VM with nullable state"
+            })
         }
         textWatcher = binding.filterEdit.addTextChangedListener {
             viewModel.filter(it.toString())
@@ -120,24 +122,38 @@ class MainViewModel(
 }
 
 // Adapter for recycler view
-class Adapter(private val fragment: MainFragment) : RecyclerView.Adapter<Adapter.DataHolder>() {
-
-    var items: List<MainViewModel.Data> = listOf()
+class Adapter(
+    private val fragment: MainFragment
+) : ListAdapter<MainViewModel.Data, Adapter.DataHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
         return DataHolder(ItemBinding.inflate(LayoutInflater.from(parent.context)))
     }
 
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
-        holder.itemBinding.title.text = items[position].title
-        holder.itemView.setOnClickListener { fragment.navigateToFullScreen(items[position]) }
-    }
-
-    override fun getItemCount(): Int {
-        return items.size
+        with(getItem(position)) {
+            holder.itemBinding.title.text = title
+            holder.itemView.setOnClickListener { fragment.navigateToFullScreen(this) }
+        }
     }
 
     class DataHolder(val itemBinding: ItemBinding) : RecyclerView.ViewHolder(itemBinding.root)
+
+    object ItemCallback : DiffUtil.ItemCallback<MainViewModel.Data>() {
+        override fun areItemsTheSame(
+            oldItem: MainViewModel.Data,
+            newItem: MainViewModel.Data
+        ): Boolean {
+            return oldItem.title == newItem.title
+        }
+
+        override fun areContentsTheSame(
+            oldItem: MainViewModel.Data,
+            newItem: MainViewModel.Data
+        ): Boolean {
+            return oldItem == newItem
+        }
+    }
 }
 
 class FragmentMainBinding(private val context: Context) {
