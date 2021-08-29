@@ -45,7 +45,9 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = Adapter(this)
+        val adapter = Adapter {
+            navigateToFullScreen(it)
+        }
         binding.recycler.adapter = adapter
         viewModel.dataLive.observe(viewLifecycleOwner) { data ->
             adapter.submitList(requireNotNull(data) {
@@ -65,7 +67,7 @@ class MainFragment : Fragment() {
         textWatcher = null
     }
 
-    fun navigateToFullScreen(data: MainViewModel.Data) {
+    private fun navigateToFullScreen(data: MainViewModel.Data) {
         // some navigate code
     }
 }
@@ -123,7 +125,7 @@ class MainViewModel(
 
 // Adapter for recycler view
 class Adapter(
-    private val fragment: MainFragment
+    private val navigateToFullScreen: (MainViewModel.Data) -> Unit,
 ) : ListAdapter<MainViewModel.Data, Adapter.DataHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
@@ -133,7 +135,7 @@ class Adapter(
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
         with(getItem(position)) {
             holder.itemBinding.title.text = title
-            holder.itemView.setOnClickListener { fragment.navigateToFullScreen(this) }
+            holder.itemView.setOnClickListener { navigateToFullScreen(this) }
         }
     }
 
