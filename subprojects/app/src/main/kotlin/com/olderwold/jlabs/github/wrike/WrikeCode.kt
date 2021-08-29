@@ -32,7 +32,7 @@ class MainFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val adapter = Adapter(this)
         binding.recycler.adapter = adapter
-        viewModel.dataLive.observe(this) {
+        viewModel.dataLive.observe(viewLifecycleOwner) {
             adapter.items = it
         }
         binding.filterEdit.addTextChangedListener {
