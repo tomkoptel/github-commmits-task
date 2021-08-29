@@ -129,17 +129,24 @@ class Adapter(
 ) : ListAdapter<MainViewModel.Data, Adapter.DataHolder>(ItemCallback) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DataHolder {
-        return DataHolder(ItemBinding.inflate(LayoutInflater.from(parent.context)))
+        val inflater = LayoutInflater.from(parent.context)
+        val itemBinding = ItemBinding.inflate(inflater)
+        return DataHolder(itemBinding, navigateToFullScreen)
     }
 
     override fun onBindViewHolder(holder: DataHolder, position: Int) {
-        with(getItem(position)) {
-            holder.itemBinding.title.text = title
-            holder.itemView.setOnClickListener { navigateToFullScreen(this) }
-        }
+        getItem(position)?.let(holder::bind)
     }
 
-    class DataHolder(val itemBinding: ItemBinding) : RecyclerView.ViewHolder(itemBinding.root)
+    class DataHolder(
+        private val itemBinding: ItemBinding,
+        private val navigateToFullScreen: (MainViewModel.Data) -> Unit,
+    ) : RecyclerView.ViewHolder(itemBinding.root) {
+        fun bind(item: MainViewModel.Data) {
+            itemBinding.title.text = item.title
+            itemView.setOnClickListener { navigateToFullScreen(item) }
+        }
+    }
 
     object ItemCallback : DiffUtil.ItemCallback<MainViewModel.Data>() {
         override fun areItemsTheSame(
