@@ -9,12 +9,12 @@ import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.TextView
 import androidx.annotation.UiThread
+import androidx.annotation.WorkerThread
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
@@ -78,15 +78,18 @@ class MainViewModel(
     val dataLive: LiveData<List<Data>> = _dataLive
 
     init {
-        executorService.execute {
-            val newData = remoteRequestForData()
-                .map { Data(it) }
-                .let(Collections::unmodifiableList)
-            _data.set(newData)
+        executorService.execute(::loadData)
+    }
 
-            // We need to make sure we post to UI thread
-            _dataLive.postValue(newData)
-        }
+    @WorkerThread
+    private fun loadData() {
+        val newData = remoteRequestForData()
+            .map { Data(it) }
+            .let(Collections::unmodifiableList)
+        _data.set(newData)
+
+        // We need to make sure we post to UI thread
+        _dataLive.postValue(newData)
     }
 
     override fun onCleared() {
