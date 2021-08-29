@@ -2,6 +2,7 @@ package com.olderwold.jlabs.github.wrike
 
 import android.content.Context
 import android.os.Bundle
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private val viewModel by viewModels<MainViewModel>()
+    private var textWatcher: TextWatcher? = null
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -35,9 +38,17 @@ class MainFragment : Fragment() {
         viewModel.dataLive.observe(viewLifecycleOwner) {
             adapter.items = it
         }
-        binding.filterEdit.addTextChangedListener {
+        textWatcher = binding.filterEdit.addTextChangedListener {
             viewModel.filter(it.toString())
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        textWatcher?.let {
+            binding.filterEdit.removeTextChangedListener(it)
+        }
+        textWatcher = null
     }
 
     fun navigateToFullScreen(data: MainViewModel.Data) {
