@@ -14,8 +14,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.recyclerview.widget.RecyclerView
+import java.util.Collections
 
 // Fragment display recycler view with a list of items
 // User has ability to filter items
@@ -68,7 +70,7 @@ class MainViewModel : ViewModel() {
             val newData = remoteRequestForData().map { Data(it) }
 
             // We need to make sure we post to UI thread
-            _dataLive.postValue(newData)
+            _dataLive.postValue(Collections.unmodifiableList(newData))
         }
 
     init {
