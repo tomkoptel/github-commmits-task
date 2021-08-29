@@ -3,7 +3,6 @@ package com.olderwold.jlabs.github.wrike
 import android.content.Context
 import android.os.Bundle
 import android.text.TextWatcher
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,15 +16,22 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
 import java.util.concurrent.atomic.AtomicReference
 
 // Fragment display recycler view with a list of items
 // User has ability to filter items
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val viewModel by viewModels<MainViewModel>()
+    private val viewModel by viewModels<MainViewModel>(
+        factoryProducer = { MainViewModel.Factory }
+    )
     private var textWatcher: TextWatcher? = null
 
     override fun onCreateView(
@@ -62,15 +68,17 @@ class MainFragment : Fragment() {
     }
 }
 
-class MainViewModel : ViewModel() {
+class MainViewModel(
+    private val executorService: ExecutorService,
+) : ViewModel() {
     private val _data = AtomicReference<List<Data>>(emptyList())
     private val dataList: List<Data> get() = _data.get()
     private val _dataLive = MutableLiveData(dataList)
 
     val dataLive: LiveData<List<Data>> = _dataLive
 
-    private val thread: Thread
-        get() = Thread {
+    init {
+        executorService.execute {
             val newData = remoteRequestForData()
                 .map { Data(it) }
                 .let(Collections::unmodifiableList)
@@ -79,17 +87,10 @@ class MainViewModel : ViewModel() {
             // We need to make sure we post to UI thread
             _dataLive.postValue(newData)
         }
-
-    init {
-        thread.start()
     }
 
     override fun onCleared() {
-        try {
-            thread.join()
-        } catch (ex: InterruptedException) {
-            Log.d("MainViewModel", "onCleared() thread was interrupted", ex)
-        }
+        executorService.shutdown()
     }
 
     private fun remoteRequestForData(): List<String> {
@@ -98,12 +99,21 @@ class MainViewModel : ViewModel() {
 
     @UiThread
     fun filter(query: String) {
-        val filteredData = dataList.filter { data -> data.title.contains(query) }
+        val filteredData = dataList.filter { data -> data.title.contains(query, ignoreCase = true) }
         _dataLive.value = filteredData
     }
 
     // Single item data class
     data class Data(var title: String)
+
+    object Factory : ViewModelProvider.Factory {
+        @Suppress("UNCHECKED_CAST")
+        override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+            return MainViewModel(
+                executorService = Executors.newSingleThreadExecutor()
+            ) as T
+        }
+    }
 }
 
 // Adapter for recycler view
