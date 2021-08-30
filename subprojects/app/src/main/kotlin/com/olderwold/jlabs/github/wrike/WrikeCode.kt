@@ -1,12 +1,12 @@
 package com.olderwold.jlabs.github.wrike
 
-import android.content.Context
 import android.os.Bundle
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.UiThread
 import androidx.annotation.WorkerThread
@@ -18,6 +18,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import java.util.Collections
@@ -45,12 +46,15 @@ class MainFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val adapter = Adapter {
+        val listAdapter = Adapter {
             navigateToFullScreen(it)
         }
-        binding.recycler.adapter = adapter
+        with(binding.recycler) {
+            layoutManager = LinearLayoutManager(context)
+            adapter = listAdapter
+        }
         viewModel.dataLive.observe(viewLifecycleOwner) { data ->
-            adapter.submitList(requireNotNull(data) {
+            listAdapter.submitList(requireNotNull(data) {
                 "Make sure that we don't instantiate VM with nullable state"
             })
         }
@@ -173,25 +177,61 @@ class Adapter(
     }
 }
 
-class FragmentMainBinding(private val context: Context) {
-    val root: View get() = View(context)
-    val recycler: RecyclerView get() = RecyclerView(context)
-    val filterEdit: EditText get() = EditText(context)
-
+class FragmentMainBinding(
+    val root: LinearLayout,
+    val filterEdit: EditText,
+    val recycler: RecyclerView
+) {
     companion object {
         fun inflate(inflater: LayoutInflater): FragmentMainBinding {
-            return FragmentMainBinding(inflater.context)
+            val context = inflater.context
+            val linearLayout = LinearLayout(context).apply {
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+                orientation = LinearLayout.VERTICAL
+            }
+            val filterEdit = EditText(context).apply {
+                id = android.R.id.edit
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+            val recycler = RecyclerView(context).apply {
+                id = android.R.id.list
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.MATCH_PARENT
+                )
+            }
+            linearLayout.addView(filterEdit)
+            linearLayout.addView(recycler)
+
+            return FragmentMainBinding(
+                root = linearLayout,
+                filterEdit = filterEdit,
+                recycler = recycler,
+            )
         }
     }
 }
 
-class ItemBinding(private val context: Context) {
-    val root: View get() = View(context)
-    val title: TextView get() = TextView(context)
-
+class ItemBinding(
+    val root: View,
+    val title: TextView,
+) {
     companion object {
         fun inflate(inflater: LayoutInflater): ItemBinding {
-            return ItemBinding(inflater.context)
+            val textView = TextView(inflater.context).apply {
+                id = android.R.id.text1
+                layoutParams = ViewGroup.LayoutParams(
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT
+                )
+            }
+            return ItemBinding(root = textView, title = textView)
         }
     }
 }

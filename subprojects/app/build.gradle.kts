@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     id("com.android.application")
     id("build.logic.android")
@@ -49,6 +51,19 @@ android {
     composeOptions {
         kotlinCompilerExtensionVersion = libs.versions.compose.get()
     }
+
+    testOptions {
+        unitTests.isIncludeAndroidResources = true
+        unitTests.isReturnDefaultValues = true
+        unitTests.all { test ->
+            test.testLogging {
+                showStackTraces = true
+                showExceptions = true
+                showCauses = true
+                exceptionFormat = TestExceptionFormat.FULL
+            }
+        }
+    }
 }
 
 dependencies {
@@ -74,4 +89,9 @@ dependencies {
     testImplementation(testLibs.kluent)
     testImplementation(testLibs.androidx.coreTesting)
     testImplementation(testLibs.bundles.mockk)
+    testImplementation(testLibs.android.robolectric)
+    testImplementation(testLibs.android.barista)
+    testImplementation(testLibs.android.junit)
+    // See https://issuetracker.google.com/issues/122321150?pli=1
+    debugImplementation(testLibs.android.fragmentTesting)
 }
