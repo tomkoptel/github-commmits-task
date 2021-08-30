@@ -30,9 +30,6 @@ import java.util.concurrent.atomic.AtomicReference
 // User has ability to filter items
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
-    private val viewModel by viewModels<MainViewModel>(
-        factoryProducer = { MainViewModel.Factory }
-    )
     private var textWatcher: TextWatcher? = null
 
     override fun onCreateView(
@@ -53,6 +50,10 @@ class MainFragment : Fragment() {
             layoutManager = LinearLayoutManager(context)
             adapter = listAdapter
         }
+
+        val viewModel by viewModels<MainViewModel>(
+            factoryProducer = { defaultViewModelProviderFactory extends MainViewModel.Factory }
+        )
         viewModel.dataLive.observe(viewLifecycleOwner) { data ->
             listAdapter.submitList(requireNotNull(data) {
                 "Make sure that we don't instantiate VM with nullable state"
