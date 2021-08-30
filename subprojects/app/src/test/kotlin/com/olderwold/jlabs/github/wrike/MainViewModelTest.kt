@@ -9,39 +9,51 @@ import org.junit.Test
 class MainViewModelTest {
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
+    private val lotrFolks = listOf(
+        Data(title = "Witch-king of Angmar"),
+        Data(title = "Frodo Baggins"),
+        Data(title = "Sam Gamgee"),
+    )
+    private val fakeDataStore = GetData {
+        listOf("Witch-king of Angmar", "Frodo Baggins", "Sam Gamgee")
+    }
 
     @Test
     fun `should load the data on instantiation`() {
-        val viewModel = MainViewModel(currentThreadExecutorService())
-
-        viewModel.dataLive.value shouldBeEqualTo listOf(
-            Data(title = "Mesocricetus auratus"),
-            Data(title = "Phodopus sungorus"),
-            Data(title = "Phodopus campbelli")
-        )
+        createViewModel().dataLive.value shouldBeEqualTo lotrFolks
     }
 
     @Test
     fun `should filter by Phodopus`() {
-        val viewModel = MainViewModel(currentThreadExecutorService())
+        val viewModel = createViewModel()
 
-        viewModel.filter(query = "Phodopus")
+        viewModel.filter(query = "SAM")
         viewModel.dataLive.value shouldBeEqualTo listOf(
-            Data(title = "Phodopus sungorus"),
-            Data(title = "Phodopus campbelli")
+            Data(title = "Sam Gamgee")
+        )
+
+        viewModel.filter(query = "sam")
+        viewModel.dataLive.value shouldBeEqualTo listOf(
+            Data(title = "Sam Gamgee")
+        )
+
+        viewModel.filter(query = "sAm")
+        viewModel.dataLive.value shouldBeEqualTo listOf(
+            Data(title = "Sam Gamgee")
         )
     }
 
     @Test
     fun `should reset to default if query empty`() {
-        val viewModel = MainViewModel(currentThreadExecutorService())
+        val viewModel = createViewModel()
 
-        viewModel.filter(query = "Phodopus")
+        viewModel.filter(query = "Witch-king")
         viewModel.filter(query = "")
-        viewModel.dataLive.value shouldBeEqualTo listOf(
-            Data(title = "Mesocricetus auratus"),
-            Data(title = "Phodopus sungorus"),
-            Data(title = "Phodopus campbelli")
-        )
+        viewModel.dataLive.value shouldBeEqualTo lotrFolks
     }
+
+    private fun createViewModel() = MainViewModel(
+        executorService = currentThreadExecutorService(),
+        getData = fakeDataStore
+    )
 }

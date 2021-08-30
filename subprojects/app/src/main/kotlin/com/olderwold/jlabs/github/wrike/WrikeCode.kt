@@ -74,6 +74,7 @@ class MainFragment : Fragment() {
 
 class MainViewModel(
     private val executorService: ExecutorService,
+    private val getData: GetData,
 ) : ViewModel() {
     private val _data = AtomicReference<List<Data>>(emptyList())
     private val dataList: List<Data> get() = _data.get()
@@ -87,7 +88,7 @@ class MainViewModel(
 
     @WorkerThread
     private fun loadData() {
-        val newData = remoteRequestForData()
+        val newData = getData()
             .map { Data(it) }
             .let(Collections::unmodifiableList)
         _data.set(newData)
@@ -98,10 +99,6 @@ class MainViewModel(
 
     override fun onCleared() {
         executorService.shutdown()
-    }
-
-    private fun remoteRequestForData(): List<String> {
-        return listOf("Mesocricetus auratus", "Phodopus sungorus", "Phodopus campbelli")
     }
 
     @UiThread
@@ -117,10 +114,21 @@ class MainViewModel(
         @Suppress("UNCHECKED_CAST")
         override fun <T : ViewModel?> create(modelClass: Class<T>): T {
             return MainViewModel(
-                executorService = Executors.newSingleThreadExecutor()
+                executorService = Executors.newSingleThreadExecutor(),
+                getData = GetDataStatic()
             ) as T
         }
     }
+}
+
+class GetDataStatic : GetData {
+    override operator fun invoke(): List<String> {
+        return listOf("Mesocricetus auratus", "Phodopus sungorus", "Phodopus campbelli")
+    }
+}
+
+fun interface GetData {
+    operator fun invoke(): List<String>
 }
 
 // Adapter for recycler view
