@@ -23,9 +23,12 @@ infix fun ViewModelProvider.Factory.extends(
 }
 
 @Suppress("UNCHECKED_CAST")
-class InterceptViewModelProviderFactory : ViewModelProvider.Factory {
+class InterceptViewModelProviderFactory(
+    defaultFactoryProvider: () -> ViewModelProvider.Factory,
+) : ViewModelProvider.Factory {
+    private val defaultFactory by lazy(LazyThreadSafetyMode.NONE, defaultFactoryProvider)
+
     val overrides = mutableMapOf<Class<ViewModel>, () -> ViewModel>()
-    lateinit var delegate: ViewModelProvider.Factory
 
     inline fun <reified T : ViewModel> overrideViewModel(
         crossinline viewModel: () -> T
@@ -41,6 +44,6 @@ class InterceptViewModelProviderFactory : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         val key = modelClass as Class<ViewModel>
         val overrideViewModel = overrides[key]?.invoke() as? T
-        return overrideViewModel ?: delegate.create(modelClass) as T
+        return overrideViewModel ?: defaultFactory.create(modelClass) as T
     }
 }

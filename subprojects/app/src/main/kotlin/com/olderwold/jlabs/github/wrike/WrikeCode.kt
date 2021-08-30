@@ -31,6 +31,9 @@ import java.util.concurrent.atomic.AtomicReference
 class MainFragment : Fragment() {
     private lateinit var binding: FragmentMainBinding
     private var textWatcher: TextWatcher? = null
+    private val viewModel by viewModels<MainViewModel>(
+        factoryProducer = { defaultViewModelProviderFactory extends MainViewModel.Factory }
+    )
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,9 +54,6 @@ class MainFragment : Fragment() {
             adapter = listAdapter
         }
 
-        val viewModel by viewModels<MainViewModel>(
-            factoryProducer = { defaultViewModelProviderFactory extends MainViewModel.Factory }
-        )
         viewModel.dataLive.observe(viewLifecycleOwner) { data ->
             listAdapter.submitList(requireNotNull(data) {
                 "Make sure that we don't instantiate VM with nullable state"
