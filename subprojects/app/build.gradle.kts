@@ -68,4 +68,10 @@ dependencies {
 
     implementation(libs.androidx.recyclerview)
     implementation(libs.androidx.fragmentKtx)
+
+    testImplementation(testLibs.bundles.okreplay)
+    testImplementation(testLibs.junit4)
+    testImplementation(testLibs.kluent)
+    testImplementation(testLibs.androidx.coreTesting)
+    testImplementation(testLibs.bundles.mockk)
 }
